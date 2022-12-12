@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1073719865328",
+    "project_id": "nftickets-5a24a",
+    "storage_bucket": "nftickets-5a24a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073719865328:android:63e835a7e54b839a923735",
+        "android_client_info": {
+          "package_name": "com.esprit.nftickets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073719865328-t7jd5mp8jpo3k54mbbd6vi9uv8tqp0qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBATkC5rZQ8Xb2HOGysYHxSj3p4qk_J9xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073719865328-t7jd5mp8jpo3k54mbbd6vi9uv8tqp0qk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1073719865328-8mpevq7f47vtgnsrssbvtsfk30cvkvpo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.esprit.nftickets"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
