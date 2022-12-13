@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nftickets/presentation/screens/on_boarding_screen.dart';
+import 'package:nftickets/presentation/screens/otp_verification_screen.dart';
 import 'package:nftickets/presentation/screens/sign_in_screen.dart';
 import 'routes.dart';
 
@@ -14,6 +15,16 @@ class AppRouter {
         );
 
       case AppRoutes.signInScreen:
+        return MaterialPageRoute(
+          builder: (_) => SignInScreen(),
+        );
+
+      case AppRoutes.otpVerificationScreen:
+        return MaterialPageRoute(
+          builder: (_) => OtpVerificationScreen(),
+        );
+
+      case AppRoutes.homeScreen:
         return MaterialPageRoute(
           builder: (_) => SignInScreen(),
         );

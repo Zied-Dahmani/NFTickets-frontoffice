@@ -17,11 +17,12 @@ class TextFormFieldWidget extends StatelessWidget {
         // ignore: missing_return
         validator: (val) {
           if (val!.isEmpty) {
-            return "${AppStrings.ktypeYour} ${labelText.toString().toLowerCase()}!";
+            return '${AppStrings.ktypeYour} ${labelText.toString().toLowerCase()}!';
           } else if (AppStrings.kphoneNumber == labelText &&
               val.trim().length != 8) {
             return AppStrings.ktypeAValidPhoneNumber;
           }
+          return null;
         },
         cursorColor: AppColors.kgrey,
         keyboardType: inputType,
@@ -38,11 +39,15 @@ class TextFormFieldWidget extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppSizes.kbuttonRadius),
-            borderSide: const BorderSide(color: AppColors.kgrey, width: AppSizes.kTextFormFieldBorderWidth),
+            borderSide: const BorderSide(
+                color: AppColors.kgrey,
+                width: AppSizes.kTextFormFieldBorderWidth),
           ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppSizes.kbuttonRadius),
-              borderSide: const BorderSide(color: AppColors.kgrey,width: AppSizes.kTextFormFieldBorderWidth)),
+              borderSide: const BorderSide(
+                  color: AppColors.klightPurple,
+                  width: AppSizes.kTextFormFieldBorderWidth)),
           prefixIcon: Icon(icon, color: AppColors.kgrey),
           labelText: labelText,
           labelStyle: const TextStyle(

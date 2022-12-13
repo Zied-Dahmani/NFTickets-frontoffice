@@ -1,34 +1,28 @@
-
 import 'package:nftickets/data/models/user_model.dart';
 
 abstract class AuthState {}
 
-class AuthInitialState extends AuthState {}
+class AuthInitial extends AuthState {}
 
-class AuthLoadingState extends AuthState {}
+class AuthLoading extends AuthState {}
 
-class AuthCodeSentState extends AuthState {}
+class AuthCodeSent extends AuthState {}
 
 // class AuthCodeVerifiedState extends AuthState {}
 
-class AuthLoggedInState extends AuthState {
+class AuthLoggedIn extends AuthState {
   final User user;
-  AuthLoggedInState(this.user);
+  AuthLoggedIn(this.user);
 }
 
-class AuthLoggedOutState extends AuthState {}
+class AuthLoggedOut extends AuthState {}
 
-class AuthErrorState extends AuthState {
+class AuthError extends AuthState {
   final String error;
-  AuthErrorState(this.error);
+  AuthError(this.error);
 }
 
-class AuthCodeNotSentErrorState extends AuthState {
+class AuthCodeIncorrectError extends AuthState {
   final String error;
-  AuthCodeNotSentErrorState(this.error);
-}
-
-class AuthCodeIncorrectErrorState extends AuthState {
-  final String error;
-  AuthCodeIncorrectErrorState(this.error);
+  AuthCodeIncorrectError(this.error);
 }

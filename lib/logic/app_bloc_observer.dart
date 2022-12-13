@@ -1,40 +1,40 @@
-import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer' as developer;
 
 class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase cubit) {
     super.onCreate(cubit);
-    stderr.writeln(cubit);
+    developer.log(cubit.toString(),name:'onCreate');
   }
 
   @override
   void onChange(BlocBase cubit, Change change) {
     super.onChange(cubit, change);
-    stderr.writeln(change);
+    developer.log(cubit.toString(),name:'onChange');
   }
 
   @override
   void onClose(BlocBase cubit) {
     super.onClose(cubit);
-    stderr.writeln(cubit);
+    developer.log(cubit.toString(),name:'onClose');
   }
 
   @override
   void onError(BlocBase cubit, Object error, StackTrace stackTrace) {
     super.onError(cubit, error, stackTrace);
-    stderr.writeln(cubit);
+    developer.log(cubit.toString(),name:'onError');
   }
 
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    stderr.writeln(bloc);
+    developer.log(bloc.toString(),name:'onEvent');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    stderr.writeln(bloc);
+    developer.log(bloc.toString(),name:'onTransition');
   }
 }

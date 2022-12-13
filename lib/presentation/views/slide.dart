@@ -19,8 +19,8 @@ class Slide extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSizes.kbigSpace,vertical: AppSizes.khugeSpace ),
       color: AppColors.kdarkPurple,
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.kbigSpace,vertical: AppSizes.khugeSpace ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -47,7 +47,7 @@ class Slide extends StatelessWidget {
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.signInScreen),
               child: const TextWidget(
                   text: AppStrings.kskip,
-                  color: AppColors.korange,
+                  color: AppColors.klightPurple,
                   bold: false,
                   size: AppFontSizes.ksmallText,
                   shadow: false)),

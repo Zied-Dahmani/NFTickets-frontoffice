@@ -28,10 +28,10 @@ class ProgressPainter extends CustomPainter {
     var linePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
-      ..color = AppColors.korange;
+      ..color = AppColors.klightPurple;
     var circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = AppColors.korange;
+      ..color = AppColors.klightPurple;
     final radians = (progress / 100) * 2 * pi;
     _drawShape(canvas, linePaint, circlePaint, -pi / 2, radians, size);
   }

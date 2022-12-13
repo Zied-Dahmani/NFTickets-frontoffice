@@ -9,28 +9,30 @@ class TextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: color,
-        fontFamily: 'Roboto',
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-        decoration: TextDecoration.none,
-        fontSize: size,
-        shadows: <Shadow>[
-          if (shadow)
-            const Shadow(
-              offset: Offset(3.0, 3.0),
-              blurRadius: 3.0,
-              color: Color.fromARGB(200, 0, 0, 0),
-            ),
-          if (shadow)
-            const Shadow(
-              offset: Offset(3.0, 3.0),
-              blurRadius: 8.0,
-              color: Colors.black,
-            ),
-        ],
+    return FittedBox(
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontFamily: 'Roboto',
+          fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+          decoration: TextDecoration.none,
+          fontSize: size,
+          shadows: <Shadow>[
+            if (shadow)
+              const Shadow(
+                offset: Offset(3.0, 3.0),
+                blurRadius: 3.0,
+                color: Color.fromARGB(200, 0, 0, 0),
+              ),
+            if (shadow)
+              const Shadow(
+                offset: Offset(3.0, 3.0),
+                blurRadius: 8.0,
+                color: Colors.black,
+              ),
+          ],
+        ),
       ),
     );
   }

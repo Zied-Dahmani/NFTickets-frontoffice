@@ -5,8 +5,8 @@ import 'package:nftickets/utils/constants.dart';
 class AuthDataProvider {
   final dio = Dio()
     ..options.baseUrl = kbaseUrl
-    ..options.connectTimeout = 10000
-    ..options.receiveTimeout = 10000;
+    ..options.connectTimeout = 5000
+    ..options.receiveTimeout = 3000;
 
   Future<Response> signUp(User user) async {
     return await dio.request(

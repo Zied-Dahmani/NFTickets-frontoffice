@@ -1,11 +1,14 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nftickets/logic/cubits/auth/auth_cubit.dart';
 import 'package:nftickets/logic/cubits/auth/auth_state.dart';
+import 'package:nftickets/logic/cubits/connectivity/connectivity_cubit.dart';
 import 'package:nftickets/presentation/router/routes.dart';
 import 'package:nftickets/presentation/widgets/button.dart';
 import 'package:nftickets/presentation/widgets/text.dart';
 import 'package:nftickets/presentation/widgets/text_form_field.dart';
+import 'package:nftickets/utils/constants.dart';
 import 'package:nftickets/utils/theme.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -20,14 +23,35 @@ class SignInScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppSizes.kbigSpace, vertical: AppSizes.khugeSpace),
-            color: AppColors.kdarkPurple,
-            child: Form(
-              key: _formKey,
+        body: BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthError) {
+              if (state.error != kcheckInternetConnection) {
+                Navigator.of(context).pop();
+              }
+              showScaffold(context, state.error);
+            } else if (state is AuthLoading) {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                            color: AppColors.klightPurple));
+                  });
+            } else if (state is AuthCodeSent) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppRoutes.otpVerificationScreen);
+            } else if (state is AuthLoggedIn) {
+              Navigator.of(context).pushNamed(AppRoutes.homeScreen);
+            }
+          },
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSizes.kbigSpace,
+                  vertical: AppSizes.khugeSpace),
+              color: AppColors.kdarkPurple,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -49,57 +73,31 @@ class SignInScreen extends StatelessWidget {
                     shadow: false,
                   ),
                   const SizedBox(height: AppSizes.khugeSpace),
-                  TextFormFieldWidget(_phoneController, Icons.phone,
-                      AppStrings.kphoneNumber, '', TextInputType.phone),
-                  const SizedBox(height: AppSizes.ksmallSpace),
-                  BlocConsumer<AuthCubit, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthErrorState) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(state.error),
-                          duration: const Duration(milliseconds: 2000),
-                        ));
-                      } else if (state is AuthCodeNotSentErrorState) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(AppStrings.ktryLater),
-                          duration: Duration(milliseconds: 2000),
-                        ));
-                      } else if (state is AuthCodeSentState) {
-                        Navigator.of(context)
-                            .pushNamed(AppRoutes.verifyPhoneNumberScreen);
-                      } else if (state is AuthLoggedInState) {
-                        Navigator.of(context).pushNamed(AppRoutes.homeScreen);
-                      }
-                    },
-                    builder: (context, state) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (state is AuthLoadingState)
-                            const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.korange,
-                              ),
-                            ),
-                        ],
-                      );
-                    },
+                  Form(
+                    key: _formKey,
+                    child: TextFormFieldWidget(_phoneController, Icons.phone,
+                        AppStrings.kphoneNumber, '', TextInputType.phone),
                   ),
-                  ButtonWidget(
-                      text: AppStrings.ksignIn,
-                      backgroundColor: AppColors.korange,
-                      textColor: AppColors.kwhite,
-                      function: () {
-                        if (_formKey.currentState!.validate()) {
-                          String phoneNumber =
-                              '+216${_phoneController.text}';
-                          BlocProvider.of<AuthCubit>(context)
-                              .sendOTP(phoneNumber);
-                        }
-                      }),
+                  const SizedBox(height: AppSizes.ksmallSpace),
+                  Center(
+                    child: ButtonWidget(
+                        text: AppStrings.ksignIn,
+                        backgroundColor: AppColors.klightPurple,
+                        textColor: AppColors.kwhite,
+                        function: () {
+                          if (_formKey.currentState!.validate()) {
+                            final connectivityState =
+                                BlocProvider.of<ConnectivityCubit>(context)
+                                    .state;
+                            if (connectivityState is ConnectivityConnected) {
+                              BlocProvider.of<AuthCubit>(context)
+                                  .sendOTP('+216${_phoneController.text}');
+                            } else {
+                              showScaffold(context, kcheckInternetConnection);
+                            }
+                          }
+                        }),
+                  ),
                   const SizedBox(height: AppSizes.ksmallSpace),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -124,15 +122,22 @@ class SignInScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppSizes.ksmallSpace),
-                  ButtonWidget(
-                    text: AppStrings.ksignInWithGoogle,
-                    image: 'assets/google.png',
-                    backgroundColor: AppColors.kwhite,
-                    textColor: AppColors.kdarkPurple,
-                    function: () {
-                      BlocProvider.of<AuthCubit>(context)
-                          .googleSignIn();
-                    },
+                  Center(
+                    child: ButtonWidget(
+                      text: AppStrings.ksignInWithGoogle,
+                      image: 'assets/google.png',
+                      backgroundColor: AppColors.kwhite,
+                      textColor: AppColors.kdarkPurple,
+                      function: () {
+                        final connectivityState =
+                            BlocProvider.of<ConnectivityCubit>(context).state;
+                        if (connectivityState is ConnectivityConnected) {
+                          BlocProvider.of<AuthCubit>(context).googleSignIn();
+                        } else {
+                          showScaffold(context, kcheckInternetConnection);
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -141,5 +146,13 @@ class SignInScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void showScaffold(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: AppColors.klightPurple,
+      content: Text(text),
+      duration: const Duration(milliseconds: 2000),
+    ));
   }
 }

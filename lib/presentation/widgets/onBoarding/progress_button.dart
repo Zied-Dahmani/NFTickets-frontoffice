@@ -24,7 +24,7 @@ class ProgressButton extends StatelessWidget {
                 height: AppSizes.kprogressButton - 15,
                 width: AppSizes.kprogressButton - 15,
                 decoration: BoxDecoration(
-                    color: AppColors.korange,
+                    color: AppColors.klightPurple,
                     borderRadius:
                         BorderRadius.circular(AppSizes.kprogressButtonRadius)),
                 child: const Center(
