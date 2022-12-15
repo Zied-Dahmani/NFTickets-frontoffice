@@ -7,7 +7,7 @@ class User with _$User {
 
   const factory User({
     required String? id,
-    required String? fullName,
+    String? fullName,
     required List<String> followers,
     required List<String> following,
   }) = _User;

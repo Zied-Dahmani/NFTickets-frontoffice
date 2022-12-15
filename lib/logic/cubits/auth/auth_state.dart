@@ -4,25 +4,22 @@ abstract class AuthState {}
 
 class AuthInitial extends AuthState {}
 
-class AuthLoading extends AuthState {}
+class AuthLoadInProgress extends AuthState {}
 
-class AuthCodeSent extends AuthState {}
+class AuthSendCodeSuccess extends AuthState {}
+
+class AuthTypeCodeFailure extends AuthState {}
 
 // class AuthCodeVerifiedState extends AuthState {}
 
-class AuthLoggedIn extends AuthState {
+class AuthLogInSuccess extends AuthState {
   final User user;
-  AuthLoggedIn(this.user);
+  AuthLogInSuccess(this.user);
 }
 
-class AuthLoggedOut extends AuthState {}
+class AuthLogOutSuccess extends AuthState {}
 
-class AuthError extends AuthState {
+class AuthIsFailure extends AuthState {
   final String error;
-  AuthError(this.error);
-}
-
-class AuthCodeIncorrectError extends AuthState {
-  final String error;
-  AuthCodeIncorrectError(this.error);
+  AuthIsFailure(this.error);
 }

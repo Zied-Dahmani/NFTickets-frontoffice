@@ -5,13 +5,13 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase cubit) {
     super.onCreate(cubit);
-    developer.log(cubit.toString(),name:'onCreate');
+    developer.log(cubit.state.toString(),name:'onCreate');
   }
 
   @override
   void onChange(BlocBase cubit, Change change) {
     super.onChange(cubit, change);
-    developer.log(cubit.toString(),name:'onChange');
+    developer.log(change.toString(),name:'onChange');
   }
 
   @override

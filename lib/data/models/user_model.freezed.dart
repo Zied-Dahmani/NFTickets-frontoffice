@@ -134,7 +134,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 class _$_User implements _User {
   const _$_User(
       {required this.id,
-      required this.fullName,
+      this.fullName,
       required final List<String> followers,
       required final List<String> following})
       : _followers = followers,
@@ -207,7 +207,7 @@ class _$_User implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final String? id,
-      required final String? fullName,
+      final String? fullName,
       required final List<String> followers,
       required final List<String> following}) = _$_User;
 

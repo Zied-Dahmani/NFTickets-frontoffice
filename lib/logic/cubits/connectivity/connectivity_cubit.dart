@@ -5,7 +5,7 @@ import 'package:nftickets/logic/cubits/connectivity/connection_type.dart';
 part 'connectivity_state.dart';
 
 class ConnectivityCubit extends Cubit<ConnectivityState> {
-  ConnectivityCubit() : super(ConnectivityLoading()) {
+  ConnectivityCubit() : super(ConnectivityLoadInProgress()) {
     checkConnectiivty();
   }
 
@@ -16,19 +16,19 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
     return connectivityStreamSubscription =
         connectivity.onConnectivityChanged.listen((connectivityResult) {
       if (connectivityResult == ConnectivityResult.wifi) {
-        emitConnectivityConnected(ConnectionType.Wifi);
+        emitConnectivityConnect(ConnectionType.Wifi);
       } else if (connectivityResult == ConnectivityResult.mobile) {
-        emitConnectivityConnected(ConnectionType.Mobile);
+        emitConnectivityConnect(ConnectionType.Mobile);
       } else if (connectivityResult == ConnectivityResult.none) {
-        emitConnectivityDisconnected();
+        emitConnectivityDisconnect();
       }
     });
   }
 
-  void emitConnectivityConnected(ConnectionType connectionType) =>
-      emit(ConnectivityConnected(connectionType: connectionType));
+  void emitConnectivityConnect(ConnectionType connectionType) =>
+      emit(ConnectivityConnect(connectionType: connectionType));
 
-  void emitConnectivityDisconnected() => emit(ConnectivityDisconnected());
+  void emitConnectivityDisconnect() => emit(ConnectivityDisconnect());
 
   @override
   Future<void> close() {

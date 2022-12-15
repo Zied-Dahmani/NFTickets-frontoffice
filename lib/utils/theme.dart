@@ -24,6 +24,9 @@ class AppSizes {
   static const kbuttonHeight = 54.0;
   static const kbuttonRadius = 20.0;
 
+  static const kotpTextFormFieldHeight = 54.0;
+  static const kotpTextFormFieldWidth = 42.0;
+
   static const kTextFormFieldBorderWidth = 2.0;
 }
 
@@ -51,10 +54,12 @@ class AppStrings {
   static const kphoneNumber = 'Phone number';
   static const ktypeYour = 'Type your';
   static const ktypeAValidPhoneNumber = 'Type a valid phone number!';
-  static const ktryLater = 'Try later!';
 
   static const kor = 'Or';
 
   static const kotpVerification = 'OTP verification';
   static const kcodeSent = 'A 6-digit code sent to you.';
+  static const ktype6DigitCode = 'Type a 6-digit code!';
+  static const kinvalidCode = 'Invalid code!';
+  static const kverify = 'Verify';
 }

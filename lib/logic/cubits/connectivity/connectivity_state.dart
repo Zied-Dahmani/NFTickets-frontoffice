@@ -2,12 +2,12 @@ part of 'connectivity_cubit.dart';
 
 abstract class ConnectivityState {}
 
-class ConnectivityLoading extends ConnectivityState {}
+class ConnectivityLoadInProgress extends ConnectivityState {}
 
-class ConnectivityConnected extends ConnectivityState {
+class ConnectivityConnect extends ConnectivityState {
   final ConnectionType connectionType;
 
-  ConnectivityConnected({required this.connectionType});
+  ConnectivityConnect({required this.connectionType});
 }
 
-class ConnectivityDisconnected extends ConnectivityState {}
+class ConnectivityDisconnect extends ConnectivityState {}
