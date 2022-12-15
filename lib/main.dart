@@ -27,7 +27,6 @@ void main() async {
   HydratedBlocOverrides.runZoned(() => runApp(MyApp()),
       storage: storage, blocObserver: AppBlocObserver());
 
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
