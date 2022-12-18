@@ -26,7 +26,6 @@ void main() async {
 
   HydratedBlocOverrides.runZoned(() => runApp(MyApp()),
       storage: storage, blocObserver: AppBlocObserver());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -45,8 +44,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthCubit>(create: (context) => AuthCubit(), lazy: true),
-          BlocProvider<ConnectivityCubit>(
-              create: (context) => ConnectivityCubit(), lazy: false),
+          BlocProvider<ConnectivityCubit>(create: (context) => ConnectivityCubit(), lazy: false),
         ],
         child: MaterialApp(
           title: 'NFTickets',

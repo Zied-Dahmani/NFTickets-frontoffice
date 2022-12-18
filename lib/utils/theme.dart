@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const kwhite = Colors.white;
   //static const kdarkPurple = Color(0xff0F0014);
   static const kdarkPurple = Color(0xff170B3B);
+  //static const kdarkPurple = Color(0xff301A47);
   static const klightPurple = Color(0xffB19FF9);
+  static const kyellow = Color(0xffFFC964);
+  static const kwhite = Colors.white;
   static const kgrey = Colors.grey;
-  //static const korange = Colors.orange;
   static const kred = Colors.red;
 }
 

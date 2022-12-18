@@ -80,7 +80,6 @@ class SignInScreen extends StatelessWidget {
                         AppStrings.kphoneNumber, '', TextInputType.phone),
                   ),
                   const SizedBox(height: AppSizes.ksmallSpace),
-                  // TODO Animation
                   BlocBuilder<ConnectivityCubit, ConnectivityState>(
                       builder: (context, state) {
                     return Column(
