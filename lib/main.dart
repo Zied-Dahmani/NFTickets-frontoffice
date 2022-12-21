@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthCubit>(create: (context) => AuthCubit(), lazy: true),
-          BlocProvider<ConnectivityCubit>(create: (context) => ConnectivityCubit(), lazy: false),
+          BlocProvider<ConnectivityCubit>(create: (context) => ConnectivityCubit(), lazy: true),
         ],
         child: MaterialApp(
           title: 'NFTickets',
@@ -45,11 +45,8 @@ class MyApp extends StatelessWidget {
           darkTheme: darkTheme,
           themeMode: ThemeMode.dark,
           onGenerateRoute: _appRouter.onGenerateRoute,
-          home: Builder(builder: (context) {
-            final connectivityState = context.watch<ConnectivityCubit>().state;
-            final authState = context.watch<AuthCubit>().state;
-            if (connectivityState is ConnectivityConnect &&
-                authState is AuthLogInSuccess) {
+          home: BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+            if (state is AuthLogInSuccess) {
               return const MainScreen();
             }
             return const OnBoardingScreen();
