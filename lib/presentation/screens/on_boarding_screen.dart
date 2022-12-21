@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nftickets/data/repositories/auth_repository.dart';
-import 'package:nftickets/utils/theme.dart';
+import 'package:flutter/services.dart';
+import 'package:nftickets/utils/strings.dart';
 import '../router/routes.dart';
 import '../views/slide.dart';
 
@@ -30,6 +30,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Theme.of(context).colorScheme.background,
+      systemNavigationBarColor: Theme.of(context).colorScheme.background,
+      statusBarIconBrightness: Brightness.light, // For Android
+      statusBarBrightness: Brightness.dark, // For iOS
+    ));
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowIndicator();

@@ -1,14 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:nftickets/logic/cubits/auth/auth_cubit.dart';
 import 'package:nftickets/logic/cubits/auth/auth_state.dart';
 import 'package:nftickets/logic/cubits/connectivity/connectivity_cubit.dart';
+import 'package:nftickets/presentation/screens/main_screen.dart';
 import 'package:nftickets/presentation/screens/on_boarding_screen.dart';
-import 'package:nftickets/presentation/screens/sign_in_screen.dart';
 import 'package:nftickets/utils/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'logic/app_bloc_observer.dart';
@@ -35,12 +34,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: AppColors.kdarkPurple,
-      systemNavigationBarColor: AppColors.kdarkPurple,
-      statusBarIconBrightness: Brightness.light, // For Android
-      statusBarBrightness: Brightness.dark, // For iOS
-    ));
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthCubit>(create: (context) => AuthCubit(), lazy: true),
@@ -49,13 +42,15 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'NFTickets',
           debugShowCheckedModeBanner: false,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.dark,
           onGenerateRoute: _appRouter.onGenerateRoute,
           home: Builder(builder: (context) {
             final connectivityState = context.watch<ConnectivityCubit>().state;
             final authState = context.watch<AuthCubit>().state;
             if (connectivityState is ConnectivityConnect &&
                 authState is AuthLogInSuccess) {
-              //return MainScreen();
+              return const MainScreen();
             }
             return const OnBoardingScreen();
           }),

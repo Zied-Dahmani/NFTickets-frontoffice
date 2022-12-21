@@ -9,9 +9,10 @@ class OtpTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SizedBox(
-      height: AppSizes.kotpTextFormFieldHeight,
-      width: AppSizes.kotpTextFormFieldWidth,
+      height: 54.0,
+      width: 42.0,
       child: Center(
         child: TextFormField(
           onChanged: (value) {
@@ -20,27 +21,22 @@ class OtpTextFormField extends StatelessWidget {
               FocusScope.of(context).nextFocus();
             }
           },
-          keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           inputFormatters: [
             LengthLimitingTextInputFormatter(1),
             FilteringTextInputFormatter.digitsOnly
           ],
-          style: const TextStyle(
-            color: AppColors.kgrey,
+          keyboardType: TextInputType.number,
+          cursorColor: theme.colorScheme.secondary,
+          style: TextStyle(
+            color: theme.colorScheme.tertiary,
           ),
-          cursorColor: AppColors.klightPurple,
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.kgrey.withOpacity(0.1),
+            fillColor: theme.colorScheme.tertiary.withOpacity(0.1),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppSizes.kbuttonRadius),
-                borderSide: BorderSide(color: AppColors.kgrey.withOpacity(0.1))),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppSizes.kbuttonRadius),
-                borderSide: const BorderSide(
-                    color: AppColors.klightPurple,
-                    width: AppSizes.kTextFormFieldBorderWidth)),
+                borderRadius: BorderRadius.circular(AppSizes.kradius),
+                borderSide: BorderSide(color: theme.colorScheme.tertiary.withOpacity(0.1))),
           ),
         ),
       ),

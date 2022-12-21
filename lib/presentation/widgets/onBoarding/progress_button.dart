@@ -11,25 +11,22 @@ class ProgressButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppSizes.kprogressButton,
-      width: AppSizes.kprogressButton,
+      height: AppSizes.kiconBackgroundSize + 15.0,
+      width: AppSizes.kiconBackgroundSize + 15.0,
       child: Stack(
         children: [
-          Indicator(
-              size: AppSizes.kprogressButton, progressValue: progressValue),
+          Indicator(size: AppSizes.kiconBackgroundSize + 15.0, progressValue: progressValue),
           Center(
             child: GestureDetector(
               onTap: () => function(),
               child: Container(
-                height: AppSizes.kprogressButton - 15,
-                width: AppSizes.kprogressButton - 15,
+                height: AppSizes.kiconBackgroundSize,
+                width: AppSizes.kiconBackgroundSize,
                 decoration: BoxDecoration(
-                    color: AppColors.klightPurple,
-                    borderRadius:
-                        BorderRadius.circular(AppSizes.kprogressButtonRadius)),
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(AppSizes.kiconBackgroundRadius)),
                 child: const Center(
-                  child: Icon(Icons.arrow_forward,
-                      color: AppColors.kwhite, size: AppSizes.kiconSize),
+                  child: Icon(Icons.arrow_forward),
                 ),
               ),
             ),

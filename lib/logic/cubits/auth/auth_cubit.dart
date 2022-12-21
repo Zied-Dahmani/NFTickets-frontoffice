@@ -38,7 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthIsFailure(ktryLater));
       },
       codeAutoRetrievalTimeout: (verificationId) {
-        if(!success) {
+        if (!success) {
           emit(AuthIsFailure(ktimeOut));
         }
         _verificationId = verificationId;

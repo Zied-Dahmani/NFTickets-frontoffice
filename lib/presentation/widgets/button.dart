@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nftickets/presentation/widgets/text.dart';
+import 'package:flutter/material.dart';
 import 'package:nftickets/utils/theme.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -16,34 +16,28 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final width = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: () => function(),
-      child: Container(
-          margin: const EdgeInsets.symmetric(vertical: AppSizes.ksmallSpace),
-          height: AppSizes.kbuttonHeight,
-          width: width - 100,
-          decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(AppSizes.kbuttonRadius),
-              border: Border.all(color: backgroundColor)),
+    return SizedBox(
+      height: 54.0,
+      width: width - 100,
+      child: ElevatedButton(
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all(backgroundColor != null ? theme.colorScheme.secondary.withOpacity(0.4) : theme.colorScheme.onBackground.withOpacity(0.2)),
+              backgroundColor: MaterialStateProperty.all(
+                  backgroundColor ?? theme.colorScheme.secondary)),
+          onPressed: () => function(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (image != null)
-                Image.asset(image,
-                    height: AppSizes.kiconSize, width: AppSizes.kiconSize),
+              if (image != null)Image.asset(image, height: AppSizes.kiconSize, width: AppSizes.kiconSize),
               if (image != null) const SizedBox(width: AppSizes.ksmallSpace),
-              if (icon != null)
-                Icon(icon, color: textColor, size: AppSizes.kiconSize),
+              if (icon != null)Icon(icon, color: textColor ?? theme.colorScheme.onBackground),
               if (icon != null) const SizedBox(width: AppSizes.ksmallSpace),
-              TextWidget(
-                text: text,
-                color: textColor,
-                bold: false,
-                size: AppFontSizes.kbuttonText,
-                shadow: false,
-              ),
+              Text(
+                text,
+                style: theme.textTheme.bodyMedium!.copyWith(color: textColor ?? theme.colorScheme.onBackground),
+              )
             ],
           )),
     );

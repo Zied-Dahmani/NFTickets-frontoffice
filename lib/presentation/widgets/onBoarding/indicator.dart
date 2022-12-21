@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:nftickets/utils/theme.dart';
 
 class Indicator extends StatefulWidget {
   const Indicator({Key? key, this.size, this.progressValue}) : super(key: key);
@@ -15,23 +14,23 @@ class _IndicatorState extends State<Indicator> {
   Widget build(BuildContext context) {
     return CustomPaint(
         size: Size(widget.size, widget.size),
-        painter: ProgressPainter(widget.progressValue));
+        painter: ProgressPainter(widget.progressValue, Theme.of(context).colorScheme.secondary));
   }
 }
 
 class ProgressPainter extends CustomPainter {
-  ProgressPainter(this.progress);
-  final progress;
+  ProgressPainter(this.progress, this.color);
+  final progress, color;
 
   @override
   void paint(Canvas canvas, Size size) {
     var linePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2
-      ..color = AppColors.klightPurple;
+      ..color = color;
     var circlePaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = AppColors.klightPurple;
+      ..color = color;
     final radians = (progress / 100) * 2 * pi;
     _drawShape(canvas, linePaint, circlePaint, -pi / 2, radians, size);
   }

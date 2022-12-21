@@ -5,10 +5,11 @@ import 'package:nftickets/logic/cubits/auth/auth_state.dart';
 import 'package:nftickets/logic/cubits/connectivity/connectivity_cubit.dart';
 import 'package:nftickets/presentation/router/routes.dart';
 import 'package:nftickets/presentation/widgets/button.dart';
-import 'package:nftickets/presentation/widgets/text.dart';
 import 'package:nftickets/presentation/widgets/text_form_field.dart';
 import 'package:nftickets/utils/constants.dart';
 import 'package:nftickets/utils/theme.dart';
+import 'package:nftickets/utils/strings.dart';
+
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -16,9 +17,11 @@ class SignInScreen extends StatelessWidget {
   final _phoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   BuildContext? dialogContext;
+  ThemeData? theme;
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -34,16 +37,14 @@ class SignInScreen extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     dialogContext = context;
-                    return const Center(
-                        child: CircularProgressIndicator(
-                            color: AppColors.klightPurple));
+                    return const Center(child: CircularProgressIndicator());
                   });
             } else if (state is AuthSendCodeSuccess) {
               Navigator.pop(dialogContext!);
               Navigator.of(context).pushNamed(AppRoutes.otpVerificationScreen);
             } else if (state is AuthLogInSuccess) {
               Navigator.pop(dialogContext!);
-              Navigator.of(context).pushNamed(AppRoutes.homeScreen);
+              Navigator.of(context).pushNamed(AppRoutes.mainScreen);
             }
           },
           child: GestureDetector(
@@ -52,32 +53,25 @@ class SignInScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: AppSizes.kbigSpace,
                   vertical: AppSizes.khugeSpace),
-              color: AppColors.kdarkPurple,
+              color: theme!.colorScheme.background,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: AppSizes.kbigSpace),
-                  const TextWidget(
-                    text: AppStrings.klogin,
-                    color: AppColors.kwhite,
-                    bold: true,
-                    size: AppFontSizes.ktitle,
-                    shadow: false,
+                  Text(
+                    AppStrings.klogin,
+                    style: theme!.textTheme.headlineLarge,
                   ),
-                  const SizedBox(height: AppSizes.ksmallSpace),
-                  const TextWidget(
-                    text: AppStrings.ksubLogin,
-                    color: AppColors.kgrey,
-                    bold: false,
-                    size: AppFontSizes.ksmallText,
-                    shadow: false,
+                  Text(
+                    AppStrings.ksubLogin,
+                    style: theme!.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: AppSizes.khugeSpace),
                   Form(
                     key: _formKey,
                     child: TextFormFieldWidget(_phoneController, Icons.phone,
-                        AppStrings.kphoneNumber, '', TextInputType.phone),
+                        AppStrings.kphoneNumber, TextInputType.phone),
                   ),
                   const SizedBox(height: AppSizes.ksmallSpace),
                   BlocBuilder<ConnectivityCubit, ConnectivityState>(
@@ -87,8 +81,6 @@ class SignInScreen extends StatelessWidget {
                         Center(
                           child: ButtonWidget(
                               text: AppStrings.ksignIn,
-                              backgroundColor: AppColors.klightPurple,
-                              textColor: AppColors.kwhite,
                               function: () {
                                 if (_formKey.currentState!.validate()) {
                                   if (state is ConnectivityConnect) {
@@ -105,24 +97,19 @@ class SignInScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Container(
-                                color: AppColors.kgrey,
+                            const Expanded(
+                              child: Divider(
                                 height: AppSizes.kdividerHeight,
                               ),
                             ),
                             const SizedBox(width: AppSizes.ksmallSpace),
-                            const TextWidget(
-                              text: AppStrings.kor,
-                              color: AppColors.kwhite,
-                              bold: false,
-                              size: AppFontSizes.ksmallText,
-                              shadow: false,
+                            Text(
+                              AppStrings.kor,
+                              style: theme!.textTheme.bodySmall,
                             ),
                             const SizedBox(width: AppSizes.ksmallSpace),
-                            Expanded(
-                              child: Container(
-                                color: AppColors.kgrey,
+                            const Expanded(
+                              child: Divider(
                                 height: AppSizes.kdividerHeight,
                               ),
                             ),
@@ -133,8 +120,8 @@ class SignInScreen extends StatelessWidget {
                           child: ButtonWidget(
                             text: AppStrings.ksignInWithGoogle,
                             image: 'assets/google.png',
-                            backgroundColor: AppColors.kwhite,
-                            textColor: AppColors.kdarkPurple,
+                            backgroundColor: theme!.colorScheme.onBackground,
+                            textColor: Colors.black,
                             function: () {
                               if (state is ConnectivityConnect) {
                                 BlocProvider.of<AuthCubit>(context)
@@ -159,8 +146,7 @@ class SignInScreen extends StatelessWidget {
 
   void showScaffold(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: AppColors.klightPurple,
-      content: Text(text),
+      content:  Text(text),
       duration: const Duration(milliseconds: 2000),
     ));
   }

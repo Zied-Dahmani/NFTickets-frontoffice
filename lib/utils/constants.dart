@@ -3,7 +3,6 @@ const ksignUp = 'user/signUp';
 const ksignIn = 'user/signIn';
 
 
-
 const kcheckInternetConnection = 'Check your internet connection!';
 const kbadRequest = 'Bad Request!';
 const ktryLater = 'Try later!';
