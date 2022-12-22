@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nftickets/data/repositories/auth_repository.dart';
 import 'package:nftickets/utils/constants.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'auth_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nftickets/data/models/user_model.dart' as Model;
@@ -60,22 +61,19 @@ class AuthCubit extends Cubit<AuthState> {
           await _auth.signInWithCredential(credential);
       if (userCredential.user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
-          final user = Model.User(
-              id: userCredential.user!.phoneNumber,
-              followers: [],
-              following: []);
+          final user = Model.User(id: userCredential.user!.phoneNumber!);
           signUp(user);
         } else {
-          signIn(userCredential.user!.phoneNumber);
+          signIn(userCredential.user!.phoneNumber!);
         }
       }
     } on FirebaseAuthException catch (ex) {
-      developer.log(ex.toString(), name: 'Catch signInWithPhone');
+      developer.log(ex.toString(), name: 'Catch Phone sign in');
       emit(AuthTypeCodeFailure());
     }
   }
 
-  Future googleSignIn() async {
+  Future signInWithGoogle() async {
     emit(AuthLoadInProgress());
     try {
       final googleSignIn = GoogleSignIn();
@@ -84,27 +82,52 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthIsFailure(ktryLater));
         return;
       }
-
       final googleAuth = await googleUser.authentication;
-
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      signInWithCredential(credential);
+    } catch (e) {
+      developer.log(e.toString(), name: 'Catch Google sign in');
+      emit(AuthIsFailure(kbadRequest));
+    }
+  }
 
+  Future signInWithApple() async {
+    emit(AuthLoadInProgress());
+    try {
+      final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final oAuthProvider = OAuthProvider('apple.com');
+      final credential = oAuthProvider.credential(
+          idToken: appleIdCredential.identityToken!,
+          accessToken: appleIdCredential.authorizationCode);
+      signInWithCredential(credential);
+    } catch (e) {
+      developer.log(e.toString(), name: 'Catch Apple sign in');
+      emit(AuthIsFailure(kbadRequest));
+    }
+  }
+
+  Future<void> signInWithCredential(credential) async {
+    try {
       final authResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (authResult.additionalUserInfo!.isNewUser) {
         final user = Model.User(
-            id: authResult.user!.email,
+            id: authResult.user!.email!,
             fullName: authResult.user!.displayName,
-            followers: [],
-            following: []);
+            image: authResult.user!.photoURL);
         signUp(user);
       } else {
-        signIn(authResult.user!.email);
+        signIn(authResult.user!.email!);
       }
     } catch (e) {
-      developer.log(e.toString(), name: 'Catch Google sign in');
+      developer.log(e.toString(), name: 'Catch sign in with credential');
       emit(AuthIsFailure(kbadRequest));
     }
   }
@@ -134,7 +157,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void signOut() async {
-    if (_auth.currentUser?.email != null) await GoogleSignIn().disconnect();
+    //if (_auth.currentUser?.email != null) await GoogleSignIn().disconnect();
     await _auth.signOut().then((value) => emit(AuthLogOutSuccess()));
   }
 }

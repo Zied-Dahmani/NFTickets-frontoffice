@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nftickets/logic/cubits/auth/auth_cubit.dart';
@@ -9,7 +11,7 @@ import 'package:nftickets/presentation/widgets/text_form_field.dart';
 import 'package:nftickets/utils/constants.dart';
 import 'package:nftickets/utils/theme.dart';
 import 'package:nftickets/utils/strings.dart';
-
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -73,7 +75,7 @@ class SignInScreen extends StatelessWidget {
                     child: TextFormFieldWidget(_phoneController, Icons.phone,
                         AppStrings.kphoneNumber, TextInputType.phone),
                   ),
-                  const SizedBox(height: AppSizes.ksmallSpace),
+                  const SizedBox(height: AppSizes.kbigSpace),
                   BlocBuilder<ConnectivityCubit, ConnectivityState>(
                       builder: (context, state) {
                     return Column(
@@ -125,13 +127,32 @@ class SignInScreen extends StatelessWidget {
                             function: () {
                               if (state is ConnectivityConnect) {
                                 BlocProvider.of<AuthCubit>(context)
-                                    .googleSignIn();
+                                    .signInWithGoogle();
                               } else {
                                 showScaffold(context, kcheckInternetConnection);
                               }
                             },
                           ),
                         ),
+                        const SizedBox(height: AppSizes.ksmallSpace),
+                        if (Platform.isIOS)
+                          Center(
+                            child: ButtonWidget(
+                              text: AppStrings.ksignInWithApple,
+                              image: 'assets/apple.png',
+                              backgroundColor: theme!.colorScheme.onBackground,
+                              textColor: Colors.black,
+                              function: () {
+                                if (state is ConnectivityConnect) {
+                                  BlocProvider.of<AuthCubit>(context)
+                                      .signInWithApple();
+                                } else {
+                                  showScaffold(
+                                      context, kcheckInternetConnection);
+                                }
+                              },
+                            ),
+                          ),
                       ],
                     );
                   }),
@@ -146,7 +167,7 @@ class SignInScreen extends StatelessWidget {
 
   void showScaffold(BuildContext context, String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content:  Text(text),
+      content: Text(text),
       duration: const Duration(milliseconds: 2000),
     ));
   }

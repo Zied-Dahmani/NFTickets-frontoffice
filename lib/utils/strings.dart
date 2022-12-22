@@ -12,6 +12,7 @@ class AppStrings {
   static const ksubLogin = 'Please sign in to continue.';
   static const ksignIn = 'Sign in';
   static const ksignInWithGoogle = 'Sign in with Google';
+  static const ksignInWithApple = 'Sign in with Apple';
   static const kphoneNumber = 'Phone number';
   static const ktypeYour = 'Type your';
   static const ktypeAValidPhoneNumber = 'Type a valid phone number!';
