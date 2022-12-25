@@ -4,10 +4,10 @@ abstract class ConnectivityState {}
 
 class ConnectivityLoadInProgress extends ConnectivityState {}
 
-class ConnectivityConnect extends ConnectivityState {
+class ConnectivityConnectSuccess  extends ConnectivityState {
   final ConnectionType connectionType;
 
-  ConnectivityConnect({required this.connectionType});
+  ConnectivityConnectSuccess ({required this.connectionType});
 }
 
-class ConnectivityDisconnect extends ConnectivityState {}
+class ConnectivityDisconnectSuccess  extends ConnectivityState {}

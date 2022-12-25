@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nftickets/logic/cubits/auth/auth_cubit.dart';
-import 'package:nftickets/logic/cubits/auth/auth_state.dart';
+import 'package:nftickets/logic/cubits/user/user_cubit.dart';
+import 'package:nftickets/logic/cubits/user/user_state.dart';
 import 'package:nftickets/presentation/widgets/button.dart';
 import 'package:nftickets/presentation/widgets/otp_text_form_field.dart';
 import 'package:nftickets/utils/constants.dart';
@@ -18,15 +18,15 @@ class OtpVerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: BlocListener<AuthCubit, AuthState>(
+      body: BlocListener<UserCubit, UserState>(
         listener: (context, state) {
-          if (state is AuthTypeCodeFailure) {
+          if (state is UserTypeCodeFailure) {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text(AppStrings.kinvalidCode),
               duration: Duration(milliseconds: 2000),
             ));
-          } else if (state is AuthIsFailure && state.error == ktimeOut) {
+          } else if (state is UserIsFailure && state.error == ktimeOut) {
             Navigator.pop(context);
           }
         },
@@ -37,6 +37,7 @@ class OtpVerificationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // TODO Display an image
               Text(
                 AppStrings.kotpVerification,
                 style: theme.textTheme.headlineLarge,
@@ -70,7 +71,7 @@ class OtpVerificationScreen extends StatelessWidget {
                           duration: Duration(milliseconds: 2000),
                         ));
                       } else {
-                        BlocProvider.of<AuthCubit>(context)
+                        BlocProvider.of<UserCubit>(context)
                             .verifyOTP(_code.join());
                       }
                     }),

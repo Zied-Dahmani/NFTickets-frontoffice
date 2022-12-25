@@ -16,11 +16,11 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
     return connectivityStreamSubscription =
         connectivity.onConnectivityChanged.listen((connectivityResult) {
       if (connectivityResult == ConnectivityResult.wifi) {
-        emit(ConnectivityConnect(connectionType: ConnectionType.Wifi));
+        emit(ConnectivityConnectSuccess(connectionType: ConnectionType.Wifi));
       } else if (connectivityResult == ConnectivityResult.mobile) {
-        emit(ConnectivityConnect(connectionType: ConnectionType.Mobile));
+        emit(ConnectivityConnectSuccess(connectionType: ConnectionType.Mobile));
       } else if (connectivityResult == ConnectivityResult.none) {
-        emit(ConnectivityDisconnect());
+        emit(ConnectivityDisconnectSuccess());
       }
     });
   }

@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nftickets/logic/cubits/auth/auth_cubit.dart';
-import 'package:nftickets/logic/cubits/auth/auth_state.dart';
+import 'package:nftickets/logic/cubits/user/user_cubit.dart';
+import 'package:nftickets/logic/cubits/user/user_state.dart';
 import 'package:nftickets/logic/cubits/connectivity/connectivity_cubit.dart';
 import 'package:nftickets/presentation/router/routes.dart';
 import 'package:nftickets/presentation/widgets/button.dart';
@@ -11,7 +10,6 @@ import 'package:nftickets/presentation/widgets/text_form_field.dart';
 import 'package:nftickets/utils/constants.dart';
 import 'package:nftickets/utils/theme.dart';
 import 'package:nftickets/utils/strings.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -27,24 +25,24 @@ class SignInScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        body: BlocListener<AuthCubit, AuthState>(
+        body: BlocListener<UserCubit, UserState>(
           listener: (context, state) {
-            if (state is AuthIsFailure) {
+            if (state is UserIsFailure) {
               if (state.error != ktimeOut) {
                 Navigator.pop(dialogContext!);
               }
               showScaffold(context, state.error);
-            } else if (state is AuthLoadInProgress) {
+            } else if (state is UserLoadInProgress) {
               showDialog(
                   context: context,
                   builder: (context) {
                     dialogContext = context;
                     return const Center(child: CircularProgressIndicator());
                   });
-            } else if (state is AuthSendCodeSuccess) {
+            } else if (state is UserSendCodeSuccess) {
               Navigator.pop(dialogContext!);
               Navigator.of(context).pushNamed(AppRoutes.otpVerificationScreen);
-            } else if (state is AuthLogInSuccess) {
+            } else if (state is UserLogInSuccess) {
               Navigator.pop(dialogContext!);
               Navigator.of(context).pushNamed(AppRoutes.mainScreen);
             }
@@ -60,6 +58,7 @@ class SignInScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // TODO Display an image
                   const SizedBox(height: AppSizes.kbigSpace),
                   Text(
                     AppStrings.klogin,
@@ -85,8 +84,8 @@ class SignInScreen extends StatelessWidget {
                               text: AppStrings.ksignIn,
                               function: () {
                                 if (_formKey.currentState!.validate()) {
-                                  if (state is ConnectivityConnect) {
-                                    BlocProvider.of<AuthCubit>(context).sendOTP(
+                                  if (state is ConnectivityConnectSuccess) {
+                                    BlocProvider.of<UserCubit>(context).sendOTP(
                                         '+216${_phoneController.text}');
                                   } else {
                                     showScaffold(
@@ -125,8 +124,8 @@ class SignInScreen extends StatelessWidget {
                             backgroundColor: theme!.colorScheme.onBackground,
                             textColor: Colors.black,
                             function: () {
-                              if (state is ConnectivityConnect) {
-                                BlocProvider.of<AuthCubit>(context)
+                              if (state is ConnectivityConnectSuccess) {
+                                BlocProvider.of<UserCubit>(context)
                                     .signInWithGoogle();
                               } else {
                                 showScaffold(context, kcheckInternetConnection);
@@ -143,8 +142,8 @@ class SignInScreen extends StatelessWidget {
                               backgroundColor: theme!.colorScheme.onBackground,
                               textColor: Colors.black,
                               function: () {
-                                if (state is ConnectivityConnect) {
-                                  BlocProvider.of<AuthCubit>(context)
+                                if (state is ConnectivityConnectSuccess) {
+                                  BlocProvider.of<UserCubit>(context)
                                       .signInWithApple();
                                 } else {
                                   showScaffold(

@@ -25,6 +25,10 @@ class AppStrings {
   static const kinvalidCode = 'Invalid code!';
   static const kverify = 'Verify';
 
-  static const khome = 'Home';
+  static const kevents = 'Events';
+  static const kmonuments = 'Monuments';
   static const kprofile = 'Profile';
+
+  static const kupcomingEvents = 'Upcoming events';
+  static const knoEvents = 'No events';
 }

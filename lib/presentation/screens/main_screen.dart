@@ -1,5 +1,7 @@
 import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nftickets/presentation/screens/events_screen.dart';
 import 'package:nftickets/utils/strings.dart';
 import 'package:nftickets/utils/theme.dart';
 
@@ -11,7 +13,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List _screens = [Container(), Container(), Container()];
+  final List _screens = [const EventsScreen(), Container(), Container()];
   var _selectedIndex = 1;
 
   @override
@@ -35,31 +37,34 @@ class _MainScreenState extends State<MainScreen> {
               FlashyTabBarItem(
                 activeColor: theme.colorScheme.onBackground,
                 icon: const Icon(
-                  Icons.home,
+                  FontAwesomeIcons.solidCalendar,
                 ),
                 title: Text(
-                  AppStrings.khome,
-                  style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onBackground),
+                  AppStrings.kevents,
+                  style: theme.textTheme.bodyMedium!
+                      .copyWith(color: theme.colorScheme.onBackground),
                 ),
               ),
               FlashyTabBarItem(
                 activeColor: theme.colorScheme.onBackground,
                 icon: const Icon(
-                  Icons.event,
+                  FontAwesomeIcons.landmark,
                 ),
                 title: Text(
-                  AppStrings.khome,
-                  style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onBackground),
+                  AppStrings.kmonuments,
+                  style: theme.textTheme.bodyMedium!
+                      .copyWith(color: theme.colorScheme.onBackground),
                 ),
               ),
               FlashyTabBarItem(
                 activeColor: theme.colorScheme.onBackground,
                 icon: const Icon(
-                  Icons.person,
+                  FontAwesomeIcons.solidUser,
                 ),
                 title: Text(
                   AppStrings.kprofile,
-                  style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.onBackground),
+                  style: theme.textTheme.bodyMedium!
+                      .copyWith(color: theme.colorScheme.onBackground),
                 ),
               ),
             ],

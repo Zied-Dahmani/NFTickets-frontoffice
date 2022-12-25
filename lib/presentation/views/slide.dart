@@ -26,6 +26,7 @@ class Slide extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // TODO Display an image
           //Image.asset(image, height: height / 2.5, fit: BoxFit.fill),
           Text(
             AppStrings.kappName,

@@ -23,20 +23,28 @@ class ButtonWidget extends StatelessWidget {
       width: width - 100,
       child: ElevatedButton(
           style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(backgroundColor != null ? theme.colorScheme.secondary.withOpacity(0.4) : theme.colorScheme.onBackground.withOpacity(0.2)),
+              overlayColor: MaterialStateProperty.all(backgroundColor != null
+                  ? theme.colorScheme.secondary.withOpacity(0.4)
+                  : theme.colorScheme.onBackground.withOpacity(0.2)),
               backgroundColor: MaterialStateProperty.all(
                   backgroundColor ?? theme.colorScheme.secondary)),
           onPressed: () => function(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (image != null)Image.asset(image, height: AppSizes.kiconSize, width: AppSizes.kiconSize),
-              if (image != null) const SizedBox(width: AppSizes.ksmallSpace),
-              if (icon != null)Icon(icon, color: textColor ?? theme.colorScheme.onBackground),
-              if (icon != null) const SizedBox(width: AppSizes.ksmallSpace),
+              if (image != null) ...[
+                Image.asset(image,
+                    height: AppSizes.kiconSize, width: AppSizes.kiconSize),
+                const SizedBox(width: AppSizes.ksmallSpace)
+              ],
+              if (icon != null) ...[
+                Icon(icon, color: textColor ?? theme.colorScheme.onBackground),
+                const SizedBox(width: AppSizes.ksmallSpace)
+              ],
               Text(
                 text,
-                style: theme.textTheme.bodyMedium!.copyWith(color: textColor ?? theme.colorScheme.onBackground),
+                style: theme.textTheme.bodyMedium!.copyWith(
+                    color: textColor ?? theme.colorScheme.onBackground),
               )
             ],
           )),

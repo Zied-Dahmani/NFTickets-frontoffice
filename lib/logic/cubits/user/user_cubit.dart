@@ -1,46 +1,46 @@
 import 'dart:developer' as developer;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nftickets/data/repositories/auth_repository.dart';
+import 'package:nftickets/data/repositories/user_repository.dart';
 import 'package:nftickets/utils/constants.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'auth_state.dart';
+import 'user_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nftickets/data/models/user_model.dart' as Model;
+import 'package:nftickets/data/models/user_model.dart' as model;
 
-class AuthCubit extends Cubit<AuthState> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  String? _verificationId;
-  final authRepository = AuthRepository();
-  var success;
-
-  AuthCubit() : super(AuthInitial()) {
+class UserCubit extends Cubit<UserState> {
+  UserCubit() : super(UserInitial()) {
     final firebaseUser = _auth.currentUser;
     if (firebaseUser != null) {
       signIn(firebaseUser.email ?? firebaseUser.phoneNumber);
     } else {
-      emit(AuthLogOutSuccess());
+      emit(UserLogOutSuccess());
     }
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _verificationId;
+  final _userRepository = UserRepository();
+  var _success;
+
   void sendOTP(String phoneNumber) async {
-    emit(AuthLoadInProgress());
+    emit(UserLoadInProgress());
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       codeSent: (verificationId, forceResendingToken) {
-        success = false;
+        _success = false;
         _verificationId = verificationId;
-        emit(AuthSendCodeSuccess());
+        emit(UserSendCodeSuccess());
       },
       verificationCompleted: (phoneAuthCredential) {
         //signInWithPhone(phoneAuthCredential);
       },
       verificationFailed: (error) {
-        emit(AuthIsFailure(ktryLater));
+        emit(UserIsFailure(ktryLater));
       },
       codeAutoRetrievalTimeout: (verificationId) {
-        if (!success) {
-          emit(AuthIsFailure(ktimeOut));
+        if (!_success) {
+          emit(UserIsFailure(ktimeOut));
         }
         _verificationId = verificationId;
       },
@@ -48,20 +48,20 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void verifyOTP(String otp) async {
-    emit(AuthLoadInProgress());
+    emit(UserLoadInProgress());
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: _verificationId!, smsCode: otp);
     signInWithPhone(credential);
   }
 
   void signInWithPhone(PhoneAuthCredential credential) async {
-    success = true;
+    _success = true;
     try {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       if (userCredential.user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
-          final user = Model.User(id: userCredential.user!.phoneNumber!);
+          final user = model.User(id: userCredential.user!.phoneNumber!);
           signUp(user);
         } else {
           signIn(userCredential.user!.phoneNumber!);
@@ -69,17 +69,17 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } on FirebaseAuthException catch (ex) {
       developer.log(ex.toString(), name: 'Catch Phone sign in');
-      emit(AuthTypeCodeFailure());
+      emit(UserTypeCodeFailure());
     }
   }
 
   Future signInWithGoogle() async {
-    emit(AuthLoadInProgress());
+    emit(UserLoadInProgress());
     try {
       final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
-        emit(AuthIsFailure(ktryLater));
+        emit(UserIsFailure(ktryLater));
         return;
       }
       final googleAuth = await googleUser.authentication;
@@ -88,12 +88,12 @@ class AuthCubit extends Cubit<AuthState> {
       signInWithCredential(credential);
     } catch (e) {
       developer.log(e.toString(), name: 'Catch Google sign in');
-      emit(AuthIsFailure(kbadRequest));
+      emit(UserIsFailure(kbadRequest));
     }
   }
 
   Future signInWithApple() async {
-    emit(AuthLoadInProgress());
+    emit(UserLoadInProgress());
     try {
       final appleIdCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -108,7 +108,7 @@ class AuthCubit extends Cubit<AuthState> {
       signInWithCredential(credential);
     } catch (e) {
       developer.log(e.toString(), name: 'Catch Apple sign in');
-      emit(AuthIsFailure(kbadRequest));
+      emit(UserIsFailure(kbadRequest));
     }
   }
 
@@ -118,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
           await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (authResult.additionalUserInfo!.isNewUser) {
-        final user = Model.User(
+        final user = model.User(
             id: authResult.user!.email!,
             fullName: authResult.user!.displayName,
             image: authResult.user!.photoURL);
@@ -128,36 +128,36 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } catch (e) {
       developer.log(e.toString(), name: 'Catch sign in with credential');
-      emit(AuthIsFailure(kbadRequest));
+      emit(UserIsFailure(kbadRequest));
     }
   }
 
-  Future<void> signUp(Model.User user) async {
+  Future<void> signUp(model.User user) async {
     try {
-      final result = await authRepository.signUp(user);
+      final result = await _userRepository.signUp(user);
       result != null
-          ? emit(AuthLogInSuccess(user))
-          : emit(AuthIsFailure(kbadRequest));
+          ? emit(UserLogInSuccess(user))
+          : emit(UserIsFailure(kbadRequest));
     } catch (e) {
       developer.log(e.toString(), name: 'Catch sign up');
-      emit(AuthIsFailure(kcheckInternetConnection));
+      emit(UserIsFailure(kcheckInternetConnection));
     }
   }
 
   Future<void> signIn(String? id) async {
     try {
-      final result = await authRepository.signIn(id);
+      final result = await _userRepository.signIn(id);
       result != null
-          ? emit(AuthLogInSuccess(Model.User.fromJson(result)))
-          : emit(AuthIsFailure(kbadRequest));
+          ? emit(UserLogInSuccess(result))
+          : emit(UserIsFailure(kbadRequest));
     } catch (e) {
       developer.log(e.toString(), name: 'Catch sign in');
-      emit(AuthIsFailure(kcheckInternetConnection));
+      emit(UserIsFailure(kcheckInternetConnection));
     }
   }
 
   void signOut() async {
     //if (_auth.currentUser?.email != null) await GoogleSignIn().disconnect();
-    await _auth.signOut().then((value) => emit(AuthLogOutSuccess()));
+    await _auth.signOut().then((value) => emit(UserLogOutSuccess()));
   }
 }

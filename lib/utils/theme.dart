@@ -16,8 +16,8 @@ ThemeData darkTheme = ThemeData(
         onSurface: Colors.white),
     fontFamily: 'Roboto',
     textTheme: const TextTheme(
-      headlineLarge: TextStyle(
-          fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.white),
+      headlineLarge: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.white),
+      headlineMedium: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
       bodyLarge: TextStyle(fontSize: 18.0, color: Colors.grey),
       bodyMedium: TextStyle(fontSize: 16.0, color: Colors.grey),
       bodySmall: TextStyle(fontSize: 14.0, color: Colors.grey),

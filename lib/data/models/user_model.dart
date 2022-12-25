@@ -9,7 +9,7 @@ class User with _$User {
     String? fullName,
     String? image,
     List<String>? followers,
-    List<String>? following,
+    List<String>? following
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

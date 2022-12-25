@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:nftickets/data/models/user_model.dart';
 import 'package:nftickets/utils/constants.dart';
 
-class AuthDataProvider {
+class UserDataProvider {
   final dio = Dio()
     ..options.baseUrl = kbaseUrl
     ..options.connectTimeout = 5000
